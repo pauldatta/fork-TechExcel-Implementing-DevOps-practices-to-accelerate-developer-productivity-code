@@ -16,7 +16,7 @@ jobs:
       - name: step 1
         uses: actions/checkout@v2
       - name: step 2
-        uses: peter-evans/colorful-gha@v1.0.0
+        uses: mscoutermarsh/cowsays-action@master
         with:
           command: cowsay
           arguments: Ready for prod--ship it!
