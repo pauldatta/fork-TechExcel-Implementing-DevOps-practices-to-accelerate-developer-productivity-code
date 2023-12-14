@@ -1,0 +1,23 @@
+# Path: .github/workflows/job1.yml
+name: FirstWorkflow
+on: [push]
+jobs:
+  job1:
+    runs-on: ubuntu-latest
+    steps:
+      - name: step 1
+        run: echo "Step 1 complete"
+      - name: step 2
+        run: echo "Step 2 complete"
+  job2:
+    runs-on: ubuntu-latest
+    needs: job1
+    steps:
+      - name: step 1
+        uses: actions/checkout@v2
+      - name: step 2
+        uses: peter-evans/colorful-gha@v1.0.0
+        with:
+          command: cowsay
+          arguments: Ready for prod--ship it!
+          color: magenta
