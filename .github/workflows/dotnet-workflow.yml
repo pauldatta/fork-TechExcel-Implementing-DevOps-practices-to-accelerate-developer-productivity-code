@@ -1,5 +1,5 @@
 # Path: .github/workflows/dotnet-workflow.yml
-name: DotNetApp
+name: BuildAndDeploy
 on:
   workflow_dispatch:
   push:
@@ -30,8 +30,10 @@ jobs:
       - name: Test
         run: dotnet test ./Application/tests/RazorPagesTestSample.Tests/RazorPagesTestSample.Tests.csproj --no-restore --verbosity normal
 
-  dockerBuildAndPush:
+  docker-build-and-push:
     runs-on: ubuntu-latest
+    needs: buildTest
+    
     steps:
     - uses: actions/checkout@v3
     - name: Docker Login
@@ -45,3 +47,38 @@ jobs:
       run: docker build -t $registryName/$repositoryName:$tag --build-arg build_version=$tag $dockerFolderPath
     - name: Docker Push
       run: docker push $registryName/$repositoryName:$tag
+
+  dev-deployment:
+    runs-on: ubuntu-latest
+    needs: docker-build-and-push
+    environment:
+      name: dev
+      url: https://faipkqekvnjcc-dev-dev.azurewebsites.net/
+    steps:
+      - name: 'Login via Azure CLI'
+        uses: azure/login@v1
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+      - uses: azure/webapps-deploy@v2
+        with:
+          app-name: 'faipkqekvnjcc-dev'
+          images: $registryName.azurecr.io/techboost/dotnetcoreapp:${{github.run_number}}
+
+  prod-deployment:
+    runs-on: ubuntu-latest
+    needs: dev-deployment
+    environment:
+      name: prod
+      url: https://faipkqekvnjcc-prod.azurewebsites.net/
+    
+    steps:
+    - uses: actions/checkout@v3
+    - name: 'Login via Azure CLI'
+      uses: azure/login@v1
+      with:
+        creds: ${{ secrets.AZURE_CREDENTIALS }}
+    - uses: azure/webapps-deploy@v2
+      with:
+        app-name: 'faipkqekvnjcc-prod'
+        images: $registryName.azurecr.io/techboost/dotnetcoreapp:${{github.run_number}}
