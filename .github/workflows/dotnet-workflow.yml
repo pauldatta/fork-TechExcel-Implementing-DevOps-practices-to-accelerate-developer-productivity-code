@@ -53,7 +53,7 @@ jobs:
     needs: docker-build-and-push
     environment:
       name: dev
-      url: https://faipkqekvnjcc-dev-dev.azurewebsites.net/
+      url: https://faipkqekvnjcc-dev.azurewebsites.net/
     steps:
       - name: 'Login via Azure CLI'
         uses: azure/login@v1
