@@ -51,4 +51,4 @@ jobs:
         with:
           dotnet-version: '6.0.x'
       - name: Test
-        run: dotnet test ./Application/tests/RazorPagesTestSample.Tests/RazorPagesTestSample.Tests.csproj
+        run: dotnet test ./Application/tests/RazorPagesTestSample.Tests/RazorPagesTestSample.Tests.csproj --no-restore --verbosity normal
