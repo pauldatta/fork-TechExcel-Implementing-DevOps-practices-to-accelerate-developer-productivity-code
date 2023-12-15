@@ -63,7 +63,7 @@ jobs:
       - uses: azure/webapps-deploy@v2
         with:
           app-name: 'faipkqekvnjcc-dev'
-          images: $registryName.azurecr.io/techboost/dotnetcoreapp:${{github.run_number}}
+          images: $registryName/$repositoryName:${{github.run_number}}
 
   prod-deployment:
     runs-on: ubuntu-latest
@@ -81,4 +81,4 @@ jobs:
     - uses: azure/webapps-deploy@v2
       with:
         app-name: 'faipkqekvnjcc-prod'
-        images: $registryName.azurecr.io/techboost/dotnetcoreapp:${{github.run_number}}
+        images: $registryName/$repositoryName:${{github.run_number}}
