@@ -11,7 +11,7 @@ on:
 
 env:
   registryName: techreadycontainers.azurecr.io
-  repositoryName: TechReadyContainers/dotnetcoreapp
+  repositoryName: techreadycontainers/dotnetcoreapp
   dockerFolderPath: ./Application/src/RazorPagesTestSample
   tag: ${{github.run_number}}
 
