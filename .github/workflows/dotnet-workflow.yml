@@ -1,14 +1,14 @@
 # Path: .github/workflows/dotnet-workflow.yml
 name: DotNetWorkflow
 on:
-  workflow_dispatch:
-    inputs:
-      appPath:
-        description: 'Path to the application .csproj file'
-        required: true
-      testPath:
-        description: 'Path to the test .csproj file'
-        required: true
+  # workflow_dispatch:
+  #   inputs:
+  #     appPath:
+  #       description: 'Path to the application .csproj file'
+  #       required: true
+  #     testPath:
+  #       description: 'Path to the test .csproj file'
+  #       required: true
   push:
     paths:
       - 'Application/**'
