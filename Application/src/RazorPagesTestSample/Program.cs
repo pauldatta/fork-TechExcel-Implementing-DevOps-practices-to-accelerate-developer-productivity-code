@@ -5,7 +5,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using RazorPagesTestSample.Data;
-// Trigger build again and again
+// Trigger build again and again and again
 namespace RazorPagesTestSample
 {
     public class Program
