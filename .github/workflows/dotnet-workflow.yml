@@ -1,12 +1,7 @@
 # Path: .github/workflows/dotnet-workflow.yml
-name: DotNetWorkflow
+name: DotNetApp
 on:
-  # workflow_dispatch:
-  #   inputs:
-  #     appPath:
-  #       required: true
-  #     testPath:
-  #       required: true
+  workflow_dispatch:
   push:
     branches: [ main]
     paths: 'Application/**'
@@ -14,8 +9,14 @@ on:
     branches: [ main]
     paths: 'Application/**'
 
+env:
+  registryName: techreadycontainers.azurecr.io
+  repositoryName: TechReadyContainers/dotnetcoreapp
+  dockerFolderPath: ./Application/src/RazorPagesTestSample
+  tag: ${{github.run_number}}
+
 jobs:
-  restore:
+  buildTest:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
@@ -28,3 +29,19 @@ jobs:
         run: dotnet build ./Application/src/RazorPagesTestSample/RazorPagesTestSample.csproj --configuration Release
       - name: Test
         run: dotnet test ./Application/tests/RazorPagesTestSample.Tests/RazorPagesTestSample.Tests.csproj --no-restore --verbosity normal
+
+  dockerBuildAndPush:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+    - name: Docker Login
+      uses: docker/login-action@v1.9.0
+      with:
+        registry: ${{ secrets.ACR_LOGIN_SERVER }}
+        username: ${{ secrets.ACR_USERNAME }}
+        password: ${{ secrets.ACR_PASSWORD }}
+        logout: true
+    - name: Docker Build
+      run: docker build -t $registryName/$repositoryName:$tag --build-arg build_version=$tag $dockerFolderPath
+    - name: Docker Push
+      run: docker push $registryName/$repositoryName:$tag
