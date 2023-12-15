@@ -63,7 +63,7 @@ jobs:
       - uses: azure/webapps-deploy@v2
         with:
           app-name: 'faipkqekvnjcc-dev'
-          images: $registryName/$repositoryName:${{github.run_number}}
+          images: ${{env.registryName}}/${{env.repositoryName}}:${{github.run_number}}
 
   prod-deployment:
     runs-on: ubuntu-latest
@@ -81,4 +81,4 @@ jobs:
     - uses: azure/webapps-deploy@v2
       with:
         app-name: 'faipkqekvnjcc-prod'
-        images: $registryName/$repositoryName:${{github.run_number}}
+        images: ${{env.registryName}}/${{env.repositoryName}}:${{github.run_number}}
