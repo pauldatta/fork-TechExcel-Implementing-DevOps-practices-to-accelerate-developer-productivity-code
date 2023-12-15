@@ -9,7 +9,7 @@ on:
         - test
         - prod
 
-name: Azure Bicep-Advanced
+name: Bicep IaC Create or Update
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
