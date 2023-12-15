@@ -25,6 +25,6 @@ jobs:
       - name: Restore dependencies
         run: dotnet restore ./Application/src/RazorPagesTestSample/RazorPagesTestSample.csproj
       - name: Build
-        run: dotnet build ./Application/src/RazorPagesTestSample/RazorPagesTestSample.csproj --configuration Release --output
+        run: dotnet build ./Application/src/RazorPagesTestSample/RazorPagesTestSample.csproj --configuration Release
       - name: Test
         run: dotnet test ./Application/tests/RazorPagesTestSample.Tests/RazorPagesTestSample.Tests.csproj --no-restore --verbosity normal
