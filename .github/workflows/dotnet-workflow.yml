@@ -4,61 +4,27 @@ on:
   # workflow_dispatch:
   #   inputs:
   #     appPath:
-  #       description: 'Path to the application .csproj file'
   #       required: true
   #     testPath:
-  #       description: 'Path to the test .csproj file'
   #       required: true
   push:
-    paths:
-      - 'Application/**'
+    branches: [ main]
+    paths: 'Application/**'
   pull_request:
-    paths:
-      - 'Application/**'
+    branches: [ main]
+    paths: 'Application/**'
 
 jobs:
   restore:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
       - name: Setup .NET
-        uses: actions/setup-dotnet@v1
-        with:
-          dotnet-version: '6.0.x'
+        uses: actions/setup-dotnet@v3
       - name: Restore dependencies
         run: dotnet restore ./Application/src/RazorPagesTestSample/RazorPagesTestSample.csproj
-  build:
-    needs: restore
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
-      - name: Setup .NET
-        uses: actions/setup-dotnet@v1
-        with:
-          dotnet-version: '6.0.x'
       - name: Build
-        run: dotnet build ./Application/src/RazorPagesTestSample/RazorPagesTestSample.csproj --configuration Release --output ./build --no-restore
-      - name: Upload build artifacts
-        uses: actions/upload-artifact@v2
-        with:
-          name: build-artifacts
-          path: ./build
-  test:
-    needs: build
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
-      - name: Download build artifacts
-        uses: actions/download-artifact@v2
-        with:
-          name: build-artifacts
-          path: ./build
-      - name: Setup .NET
-        uses: actions/setup-dotnet@v1
-        with:
-          dotnet-version: '6.0.x'
+        run: dotnet build ./Application/src/RazorPagesTestSample/RazorPagesTestSample.csproj --configuration Release --output
       - name: Test
         run: dotnet test ./Application/tests/RazorPagesTestSample.Tests/RazorPagesTestSample.Tests.csproj --no-restore --verbosity normal
