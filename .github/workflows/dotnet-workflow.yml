@@ -1,0 +1,54 @@
+# Path: .github/workflows/dotnet-workflow.yml
+name: DotNetWorkflow
+on:
+  workflow_dispatch:
+    inputs:
+      appPath:
+        description: 'Path to the application .csproj file'
+        required: true
+      testPath:
+        description: 'Path to the test .csproj file'
+        required: true
+  push:
+    paths:
+      - 'Application/**'
+  pull_request:
+    paths:
+      - 'Application/**'
+
+jobs:
+  restore:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v1
+        with:
+          dotnet-version: '6.0.x'
+      - name: Restore dependencies
+        run: dotnet restore ./Application/src/RazorPagesTestSample/RazorPagesTestSample.csproj
+  build:
+    needs: restore
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v1
+        with:
+          dotnet-version: '6.0.x'
+      - name: Build
+        run: dotnet build ./Application/src/RazorPagesTestSample/RazorPagesTestSample.csproj --configuration Release
+  test:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v1
+        with:
+          dotnet-version: '6.0.x'
+      - name: Test
+        run: dotnet test ./Application/tests/RazorPagesTestSample.Tests/RazorPagesTestSample.Tests.csproj
